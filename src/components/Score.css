@@ -1,0 +1,75 @@
+#score-container {
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#super-meter-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+#super-meter-wrapper p {
+  color: darkgreen;
+  font-size: 30px;
+  margin: 0;
+}
+
+#super-meter {
+  width: 5vw;
+  background-color: black;
+  color: darkgreen;
+  font-size: 25px;
+  border: 5px solid darkred;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+}
+
+#credit-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+#credit-wrapper p {
+  color: darkred;
+  font-size: 25px;
+  margin: 0;
+}
+
+#credit {
+  width: 5vw;
+  background-color: darkred;
+  color: white;
+  font-size: 25px;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+  padding: 2px;
+}
+
+#stake-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+#stake-wrapper p {
+  color: darkred;
+  font-size: 25px;
+  margin: 0;
+}
+
+#stake {
+  width: 5vw;
+  background-color: darkred;
+  color: white;
+  font-size: 25px;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+  padding: 2px;
+}

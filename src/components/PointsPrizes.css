@@ -1,0 +1,38 @@
+#points-prizes-container {
+  width: 20vw;
+  height: 30vh;
+  background: #373b44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373b44);
+  background: linear-gradient(to right, #4286f4, #373b44);
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+  display: flex;
+  padding: 15px;
+  justify-content: space-around;
+  letter-spacing: 5px;
+}
+
+#left-wrapper {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-align: center;
+}
+
+#left-wrapper p {
+  margin: 0;
+  font-size: 25px;
+}
+
+#right-wrapper {
+  display: flex;
+  flex-direction: column;
+  color: gold;
+  text-align: center;
+}
+
+#right-wrapper p {
+  margin: 0;
+  font-size: 25px;
+}

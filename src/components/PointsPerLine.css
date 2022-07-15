@@ -1,0 +1,136 @@
+#points-per-line-container {
+  width: 20vw;
+  height: 30vh;
+  background: #373b44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373b44);
+  background: linear-gradient(to right, #4286f4, #373b44);
+  border-radius: 10px;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+  display: flex;
+  padding: 15px;
+  padding-left: 0;
+  justify-content: space-between;
+}
+
+#right-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#left-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#left-wrapper span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: gold;
+  font-weight: 900;
+}
+
+#right-wrapper span {
+  display: flex;
+  align-items: center;
+  font-size: 50px;
+  color: gold;
+  justify-content: center;
+  font-weight: 900;
+}
+
+#bar-icon {
+  background-image: url('../../icons/bar-red.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 70px;
+  height: 50px;
+  position: relative;
+  left: 20px;
+  margin-right: 30px;
+}
+
+#bell-icon {
+  background-image: url('../../icons/Christmas_L9.svg');
+  width: 100px;
+  height: 50px;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  left: 10px;
+}
+
+#star-icon {
+  background-image: url('../../icons/mystica-Stars-simple-2.svg');
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#seven-icon {
+  background-image: url('../../icons/1386161139.svg');
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#watermelon-icon {
+  background-image: url('../../icons/watermelon.svg');
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#strawberry-icon {
+  background-image: url('../../icons/baroquon_strawberry.svg');
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#plum-icon {
+  background-image: url('../../icons/Plum-Transparent.png');
+  background-size: contain;
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#lemon-icon {
+  background-image: url('../../icons/LemonLores.svg');
+  background-size: contain;
+  height: 40px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#orange-icon {
+  background-image: url('../../icons/apelsinas-orange.svg');
+  background-size: contain;
+  height: 50px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#cherry-icon {
+  background-image: url('../../icons/picotas_remix_cherry_glossy_fruit.svg');
+  background-size: contain;
+  height: 60px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}

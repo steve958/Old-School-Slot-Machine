@@ -1,0 +1,115 @@
+#game-box-container {
+  width: 30vw;
+  height: 40vh;
+  background: #abbaab;
+  background: -webkit-linear-gradient(to right, #ffffff, #abbaab);
+  background: linear-gradient(to right, #ffffff, #abbaab);
+  border-radius: 5% / 50%;
+  margin: 20px;
+  position: relative;
+}
+
+#content {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(
+      to top left,
+      rgba(0, 0, 139, 0) 0%,
+      rgba(0, 0, 139, 0) calc(50% - 0.8px),
+      rgba(0, 0, 139, 1) 50%,
+      rgba(0, 0, 139, 0) calc(50% + 0.8px),
+      rgba(0, 0, 139, 0) 100%
+    ),
+    linear-gradient(
+      to top right,
+      rgba(0, 0, 139, 0) 0%,
+      rgba(0, 0, 139, 0) calc(50% - 0.8px),
+      rgba(0, 0, 139, 1) 50%,
+      rgba(0, 0, 139, 0) calc(50% + 0.8px),
+      rgba(0, 0, 139, 0) 100%
+    );
+}
+
+#content hr {
+  margin: 165px;
+  margin-top: 3px;
+  margin-left: 0;
+  width: 100%;
+  position: relative;
+  top: 20px;
+  background-color: blue;
+  height: 1px;
+  z-index: 0;
+}
+
+#content-icons-first-move {
+  left: -5px;
+  z-index: 1;
+  position: absolute;
+  bottom: -45px;
+}
+
+#content-icons-first-move div {
+  height: 15vh;
+  width: 6vw;
+  top: 0;
+  left: 0;
+  margin: 12px;
+}
+
+#content-icons-second-move {
+  left: 230px;
+  z-index: 1;
+  position: absolute;
+  bottom: -45px;
+}
+
+#content-icons-second-move div {
+  height: 15vh;
+  width: 6vw;
+  top: 0;
+  left: 0;
+  margin: 12px;
+}
+
+#content-icons-third-move {
+  left: 460px;
+  z-index: 1;
+  position: absolute;
+  bottom: -45px;
+}
+
+#content-icons-third-move div {
+  height: 15vh;
+  width: 6vw;
+  top: 0;
+  left: 0;
+  margin: 12px;
+}
+
+#local-score {
+  background: #373b44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373b44);
+  background: linear-gradient(to right, #4286f4, #373b44);
+  width: 150px;
+  height: 60px;
+  border: 10px solid gold;
+  position: absolute;
+  top: -70px;
+  z-index: 2;
+  right: 190px;
+  font-size: 50px;
+  color: white;
+  text-align: center;
+}
+
+.blinker {
+  animation: blinker 1s infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
