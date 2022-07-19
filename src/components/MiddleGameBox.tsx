@@ -16,6 +16,7 @@ interface MiddleBoxProps {
   setMiddleBoxScore: Function
   middleBoxScore: any
   currentMove: any
+  nextGame: boolean
 }
 
 const MiddleGameBox: React.FC<MiddleBoxProps> = (props) => {
@@ -38,6 +39,12 @@ const MiddleGameBox: React.FC<MiddleBoxProps> = (props) => {
       props.setMiddleBoxScore(calcScore(firstMove, secondMove, thirdMove))
     }
   }, [thirdMove])
+
+  useEffect(() => {
+    setFirstMove(null)
+    setSecondMove(null)
+    setThirdMove(null)
+  }, [props.nextGame])
 
   return (
     <div id="game-box-container">

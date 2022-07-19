@@ -16,6 +16,7 @@ interface LeftBoxProps {
   setLeftBoxScore: Function
   leftBoxScore: any
   currentMove: any
+  nextGame: boolean
 }
 
 const LeftGameBox: React.FC<LeftBoxProps> = (props) => {
@@ -39,6 +40,12 @@ const LeftGameBox: React.FC<LeftBoxProps> = (props) => {
       props.setLeftBoxScore(calcScore(firstMove, secondMove, thirdMove))
     }
   }, [thirdMove])
+
+  useEffect(() => {
+    setFirstMove(null)
+    setSecondMove(null)
+    setThirdMove(null)
+  }, [props.nextGame])
 
   return (
     <div id="game-box-container">

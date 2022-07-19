@@ -3,7 +3,8 @@ import './Score.css'
 
 interface SuperMeterProps {
   superMeter: any
-  setSuperMeter: Function
+  setCredit: Function
+  credit: number
 }
 
 const Score: React.FC<SuperMeterProps> = (props) => {
@@ -15,7 +16,16 @@ const Score: React.FC<SuperMeterProps> = (props) => {
       </span>
       <span id="credit-wrapper">
         <p>CREDIT</p>
-        <div id="credit">0</div>
+        <div
+          id="credit"
+          onClick={() =>
+            props.setCredit((oldState: number) => {
+              return oldState + 1
+            })
+          }
+        >
+          {props.credit}
+        </div>
       </span>
       <span id="stake-wrapper">
         <p>STAKE</p>

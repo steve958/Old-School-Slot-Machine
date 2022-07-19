@@ -8,14 +8,20 @@ export function possibleResults() {
     { value: 40, iconID: 5 },
     { value: 40, iconID: 4 },
     { value: 20, iconID: 3 },
+    { value: 20, iconID: 3 },
+    { value: 20, iconID: 3 },
     { value: 20, iconID: 2 },
+    { value: 20, iconID: 2 },
+    { value: 20, iconID: 2 },
+    { value: 20, iconID: 1 },
+    { value: 20, iconID: 1 },
     { value: 20, iconID: 1 },
   ]
 
   return [
-    allIcons[Math.trunc(Math.random() * 10)],
-    allIcons[Math.trunc(Math.random() * 10)],
-    allIcons[Math.trunc(Math.random() * 10)],
+    allIcons[Math.trunc(Math.random() * 16)],
+    allIcons[Math.trunc(Math.random() * 16)],
+    allIcons[Math.trunc(Math.random() * 16)],
   ]
 }
 
@@ -165,4 +171,34 @@ export function blinkOrNotMiddleSecondMove(current, first, second, third) {
   }
 
   return undefined
+}
+
+export function lowerHigherRandomizer(previousInt) {
+  let random = Math.trunc(Math.random() * 13 + 1)
+
+  while (previousInt === random) {
+    random = Math.trunc(Math.random() * 13 + 1)
+  }
+
+  return random
+}
+
+export function calcSuperMeter(supermeter) {
+  if (supermeter >= 750) {
+    return 200
+  } else if (supermeter > 500) {
+    return 100
+  } else if (supermeter > 400) {
+    return 40
+  } else if (supermeter > 300) {
+    return 10
+  } else if (supermeter > 250) {
+    return 6
+  } else if (supermeter > 200) {
+    return 4
+  } else if (supermeter > 150) {
+    return 3
+  } else if (supermeter > 100) {
+    return 2
+  }
 }

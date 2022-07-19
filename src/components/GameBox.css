@@ -7,6 +7,7 @@
   border-radius: 5% / 50%;
   margin: 20px;
   position: relative;
+  cursor: pointer;
 }
 
 #content {
@@ -98,7 +99,7 @@
   position: absolute;
   top: -70px;
   z-index: 2;
-  right: 190px;
+  right: 210px;
   font-size: 50px;
   color: white;
   text-align: center;

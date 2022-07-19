@@ -16,6 +16,7 @@ interface RightBoxProps {
   setRightBoxScore: Function
   rightBoxScore: any
   currentMove: any
+  nextGame: boolean
 }
 
 const RightGameBox: React.FC<RightBoxProps> = (props) => {
@@ -38,6 +39,12 @@ const RightGameBox: React.FC<RightBoxProps> = (props) => {
       props.setRightBoxScore(calcScore(firstMove, secondMove, thirdMove))
     }
   }, [thirdMove])
+
+  useEffect(() => {
+    setFirstMove(null)
+    setSecondMove(null)
+    setThirdMove(null)
+  }, [props.nextGame])
 
   return (
     <div id="game-box-container">

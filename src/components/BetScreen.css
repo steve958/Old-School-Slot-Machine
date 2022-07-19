@@ -1,3 +1,141 @@
 #bet-screen-container {
   position: absolute;
+  height: 95vh;
+  width: 100vw;
+  background-color: rgba(240, 248, 255, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+}
+
+#bet-screen-left-wrapper,
+#bet-screen-right-wrapper {
+  width: 8vw;
+  background: #abbaab;
+  background: -webkit-linear-gradient(to right, #ffffff, #abbaab);
+  background: linear-gradient(to right, #ffffff, #abbaab);
+  border: 10px double darkred;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#bet-screen-left-wrapper p,
+#bet-screen-right-wrapper p {
+  font-size: 50px;
+  margin: 0;
+  color: goldenrod;
+}
+
+#bet-screen-middle-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 50px;
+}
+
+#bet-screen-middle-wrapper h1 {
+  font-size: 100px;
+  letter-spacing: 20px;
+  color: goldenrod;
+  margin-top: 0;
+}
+
+#bet-score {
+  width: 200px;
+  background: #abbaab;
+  background: -webkit-linear-gradient(to right, #ffffff, #abbaab);
+  background: linear-gradient(to right, #ffffff, #abbaab);
+  font-size: 50px;
+  text-align: center;
+  margin-bottom: 100px;
+  border: 5px double darkred;
+}
+
+#bet-score-middle-container {
+  width: 50vw;
+  height: 50vh;
+  display: flex;
+  justify-content: space-around;
+}
+
+#middle-current {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+  width: 10vw;
+  font-size: 150px;
+  background: #abbaab;
+  background: -webkit-linear-gradient(to right, #ffffff, #abbaab);
+  background: linear-gradient(to right, #ffffff, #abbaab);
+  border-radius: 10% / 50%;
+  border: 10px double goldenrod;
+}
+
+#middle-lower,
+#middle-higher {
+  font-size: 50px;
+  background: #373b44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373b44);
+  background: linear-gradient(to right, #4286f4, #373b44);
+  height: 15vh;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px double darkred;
+  color: white;
+  cursor: pointer;
+}
+
+.blinker-low {
+  animation: blink-lower 1s infinite;
+}
+
+.blinker-high {
+  animation: blink-higher 1s infinite;
+}
+
+@keyframes blink-lower {
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes blink-higher {
+  50% {
+    opacity: 0;
+  }
+}
+
+.active-number {
+  background-color: darkred;
+  color: white;
+  width: 100%;
+  text-align: center;
+}
+
+#withdraw-button {
+  position: absolute;
+  bottom: 8vh;
+  padding: 10px;
+  background-color: gold;
+  color: darkred;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 12px;
+  border: 5px double goldenrod;
+  box-shadow: 2px 2px 2px 2px #000000;
+}
+
+#withdraw-button:active {
+  border-radius: 15px;
+  padding: 8px;
+  box-shadow: none;
 }

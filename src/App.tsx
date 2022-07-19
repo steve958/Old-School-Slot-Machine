@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react'
 import PointsPerLine from './components/PointsPerLine'
 import NextMoveIndicator from './components/NextMoveIndicator'
 import PointsPrizes from './components/PointsPrizes'
-
 import './App.css'
 import Score from './components/Score'
 import LeftGameBox from './components/LeftGameBox'
 import MiddleGameBox from './components/MiddleGameBox'
 import RightGameBox from './components/RightGameBox'
+import BetScreen from './components/BetScreen'
+import { calcSuperMeter } from './logic/GameLogic'
 
 function App() {
   const [keyStroke, setKeyStroke] = useState<any>(false)
+  const [credit, setCredit] = useState<number>(0)
   const [currentMove, setCurrentMove] = useState<any>([])
   const [leftBoxMoves, setLeftBoxMoves] = useState<any>(null)
   const [middleBoxMoves, setMiddleBoxMoves] = useState<any>(null)
@@ -19,6 +21,9 @@ function App() {
   const [middleBoxScore, setMiddleBoxScore] = useState<any>(null)
   const [rightBoxScore, setRightBoxScore] = useState<any>(null)
   const [superMeter, setSuperMeter] = useState<number>(0)
+  const [nextGame, setNextGame] = useState<boolean>(false)
+  const [startButtonClicked, setStartButtonClicked] = useState<boolean>(false)
+  const [betScreenActive, setBetScreenActive] = useState<boolean>(false)
   useEffect(() => {
     if (leftBoxScore || middleBoxScore || rightBoxScore) {
       if (leftBoxScore && middleBoxScore && rightBoxScore) {
@@ -34,6 +39,47 @@ function App() {
       }
     }
   }, [leftBoxScore, rightBoxScore, middleBoxScore])
+
+  useEffect(() => {
+    if (
+      typeof leftBoxScore === 'number' &&
+      typeof rightBoxScore === 'number' &&
+      typeof middleBoxScore === 'number' &&
+      superMeter > 100
+    ) {
+      setTimeout(() => {
+        setBetScreenActive(true)
+      }, 2000)
+    } else if (
+      typeof leftBoxScore === 'number' &&
+      typeof rightBoxScore === 'number' &&
+      typeof middleBoxScore === 'number' &&
+      superMeter < 100
+    ) {
+      setTimeout(() => {
+        setNextGame(!nextGame)
+        setCredit((oldState) => {
+          return oldState - 1
+        })
+      }, 2000)
+    }
+  }, [superMeter, leftBoxScore, middleBoxScore, rightBoxScore])
+
+  useEffect(() => {
+    setLeftBoxMoves(null)
+    setRightBoxMoves(null)
+    setMiddleBoxMoves(null)
+    setRightBoxScore(null)
+    setLeftBoxScore(null)
+    setMiddleBoxScore(null)
+    setSuperMeter(0)
+    setKeyStroke(false)
+    console.log('restart')
+
+    if (credit === 0) {
+      setStartButtonClicked(false)
+    }
+  }, [nextGame])
 
   function handleKeyStrokeLeft() {
     if (leftBoxScore === null) {
@@ -55,6 +101,23 @@ function App() {
 
   return (
     <div className="App">
+      {betScreenActive && (
+        <BetScreen
+          superMeter={
+            typeof leftBoxScore === 'number' &&
+            typeof rightBoxScore === 'number' &&
+            typeof middleBoxScore === 'number' &&
+            superMeter > 100
+              ? calcSuperMeter(superMeter)
+              : null
+          }
+          setBetScreenActive={setBetScreenActive}
+          setSuperMeter={setSuperMeter}
+          setNextGame={setNextGame}
+          nextGame={nextGame}
+          setCredit={setCredit}
+        ></BetScreen>
+      )}
       <div id="upper-wrapper">
         <div id="upper-wrapper-left-section">
           <h2 id="heading">Points per Line</h2>
@@ -69,6 +132,8 @@ function App() {
             middleBoxScore={middleBoxScore}
             rightBoxScore={rightBoxScore}
             superMeter={superMeter}
+            startButtonClicked={startButtonClicked}
+            credit={credit}
           />
         </div>
         <div id="upper-wrapper-right-section">
@@ -76,14 +141,32 @@ function App() {
           <PointsPrizes />
         </div>
         <div id="score-section">
-          <Score superMeter={superMeter} setSuperMeter={setSuperMeter} />
+          <Score
+            superMeter={superMeter}
+            setCredit={setCredit}
+            credit={credit}
+          />
         </div>
       </div>
+      {credit === 0 ||
+        (!startButtonClicked && (
+          <button
+            id="start-button"
+            onClick={() => {
+              setStartButtonClicked(true)
+              setKeyStroke(false)
+            }}
+          >
+            START
+          </button>
+        ))}
       <div id="bottom-wrapper">
         <span
           onClick={() => {
-            setLeftBoxMoves(currentMove)
-            handleKeyStrokeLeft()
+            if (startButtonClicked) {
+              setLeftBoxMoves(currentMove)
+              handleKeyStrokeLeft()
+            }
           }}
         >
           <LeftGameBox
@@ -91,12 +174,15 @@ function App() {
             setLeftBoxScore={setLeftBoxScore}
             leftBoxScore={leftBoxScore}
             currentMove={currentMove}
+            nextGame={nextGame}
           />
         </span>
         <span
           onClick={() => {
-            setMiddleBoxMoves(currentMove)
-            handleKeyStrokeMiddle()
+            if (startButtonClicked) {
+              setMiddleBoxMoves(currentMove)
+              handleKeyStrokeMiddle()
+            }
           }}
         >
           <MiddleGameBox
@@ -104,12 +190,15 @@ function App() {
             setMiddleBoxScore={setMiddleBoxScore}
             middleBoxScore={middleBoxScore}
             currentMove={currentMove}
+            nextGame={nextGame}
           />
         </span>
         <span
           onClick={() => {
-            setRightBoxMoves(currentMove)
-            handleKeyStrokeRight()
+            if (startButtonClicked) {
+              setRightBoxMoves(currentMove)
+              handleKeyStrokeRight()
+            }
           }}
         >
           <RightGameBox
@@ -117,6 +206,7 @@ function App() {
             setRightBoxScore={setRightBoxScore}
             rightBoxScore={rightBoxScore}
             currentMove={currentMove}
+            nextGame={nextGame}
           />
         </span>
       </div>
