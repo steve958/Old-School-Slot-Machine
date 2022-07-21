@@ -9,6 +9,8 @@ interface BetScreenProps {
   setNextGame: Function
   nextGame: boolean
   setCredit: Function
+  fallBackMeter: number
+  stake: number
 }
 
 const BetScreen: React.FC<BetScreenProps> = (props) => {
@@ -16,7 +18,9 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
   const [userClickedLower, setUserClickedLower] = useState<boolean>(false)
   const [nextMove, setNextMove] = useState<boolean>(false)
   const [clickEvent, setClickEvent] = useState<boolean>(false)
-  const [currentScore, setCurrentScore] = useState<any>(props.superMeter)
+  const [currentScore, setCurrentScore] = useState<any>(
+    props.superMeter !== null ? props.superMeter : props.fallBackMeter,
+  )
   const [currentNumber, setCurrentNumber] = useState<number>(
     Math.trunc(Math.random() * 13 + 1),
   )
@@ -31,6 +35,14 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
     } else {
       setNextNumber(lowerHigherRandomizer(currentNumber))
     }
+
+    if (props.superMeter === null) {
+      props.setSuperMeter(props.fallBackMeter)
+    }
+  }, [])
+
+  useEffect(() => {
+    setNextNumber(lowerHigherRandomizer(currentNumber))
   }, [nextMove])
 
   useEffect(() => {
@@ -43,7 +55,6 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
         setCurrentNumber(nextNumber)
         setCurrentScore(0)
         props.setSuperMeter(0)
-        props.setNextGame(!props.nextGame)
       }
     } else if (userClickedLower) {
       if (nextNumber < currentNumber) {
@@ -54,7 +65,6 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
         setCurrentNumber(nextNumber)
         setCurrentScore(0)
         props.setSuperMeter(0)
-        props.setNextGame(!props.nextGame)
       }
     }
   }, [clickEvent])
@@ -63,96 +73,126 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
     if (currentScore === 0) {
       setTimeout(() => {
         props.setBetScreenActive(false)
+        props.setNextGame(!props.nextGame)
       }, 3000)
-    } else if (currentScore >= 200) {
-      setCurrentScore(200)
+    } else if (currentScore >= 200 * props.stake) {
+      setCurrentScore(200 * props.stake)
     }
   }, [currentScore])
 
   return (
     <div id="bet-screen-container">
       <div id="bet-screen-left-wrapper">
-        <p className={currentScore >= 200 ? 'active-number' : undefined}>200</p>
         <p
           className={
-            currentScore >= 100 && currentScore < 200
+            currentScore >= 200 * props.stake ? 'active-number' : undefined
+          }
+        >
+          {200 * props.stake}
+        </p>
+        <p
+          className={
+            currentScore >= 100 * props.stake &&
+            currentScore < 200 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          100
+          {100 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 60 && currentScore < 100
+            currentScore >= 60 * props.stake && currentScore < 100 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          60
+          {60 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 40 && currentScore < 60
+            currentScore >= 40 * props.stake && currentScore < 60 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          40
+          {40 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 30 && currentScore < 40
+            currentScore >= 30 * props.stake && currentScore < 40 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          30
+          {30 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 20 && currentScore < 30
+            currentScore >= 20 * props.stake && currentScore < 30 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          20
+          {20 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 15 && currentScore < 20
+            currentScore >= 15 * props.stake && currentScore < 20 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          15
+          {15 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 10 && currentScore < 15
+            currentScore >= 10 * props.stake && currentScore < 15 * props.stake
               ? 'active-number'
               : undefined
           }
         >
-          10
+          {10 * props.stake}
         </p>
         <p
           className={
-            currentScore >= 6 && currentScore < 10 ? 'active-number' : undefined
+            currentScore >= 6 * props.stake && currentScore < 10 * props.stake
+              ? 'active-number'
+              : undefined
           }
         >
-          6
+          {6 * props.stake}
         </p>
-        <p className={currentScore === 4 ? 'active-number' : undefined}>4</p>
-        <p className={currentScore === 3 ? 'active-number' : undefined}>3</p>
-        <p className={currentScore === 2 ? 'active-number' : undefined}>2</p>
+        <p
+          className={
+            currentScore === 4 * props.stake ? 'active-number' : undefined
+          }
+        >
+          {4 * props.stake}
+        </p>
+        <p
+          className={
+            currentScore === 3 * props.stake ? 'active-number' : undefined
+          }
+        >
+          {3 * props.stake}
+        </p>
+        <p
+          className={
+            currentScore === 2 * props.stake ? 'active-number' : undefined
+          }
+        >
+          {2 * props.stake}
+        </p>
         <p className={currentScore === 0 ? 'active-number' : undefined}>0</p>
       </div>
       <div id="bet-screen-middle-wrapper">
         <h1>WIN</h1>
-        <div id="bet-score">{currentScore}</div>
+        <div id="bet-score">
+          {currentScore === null ? props.fallBackMeter : currentScore}
+        </div>
         <div id="bet-score-middle-container">
-          {currentScore < 200 && (
+          {currentScore < 200 * props.stake && (
             <div
               id="middle-lower"
               onClick={() => {
@@ -166,7 +206,7 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
             </div>
           )}
           <div id="middle-current">{currentNumber}</div>
-          {currentScore < 200 && (
+          {currentScore < 200 * props.stake && (
             <div
               id="middle-higher"
               onClick={() => {
@@ -189,7 +229,6 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
               })
               setCurrentScore(0)
               props.setSuperMeter(0)
-              props.setNextGame(!props.nextGame)
             }}
           >
             withdraw

@@ -73,4 +73,38 @@
   -webkit-box-shadow: 5px 5px 10px 5px #000000;
   box-shadow: 5px 5px 15px 5px #000000;
   padding: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+#stake-minus {
+  position: absolute;
+  width: 20px;
+  height: 5px;
+  background-color: white;
+  top: 2px;
+  left: 5px;
+  cursor: grabbing;
+}
+
+#stake-minus-disabled {
+  position: absolute;
+  width: 20px;
+  height: 5px;
+  background-color: white;
+  top: 2px;
+  left: 5px;
+  cursor: not-allowed;
+}
+
+#stake-disabled {
+  width: 5vw;
+  background-color: darkred;
+  color: white;
+  font-size: 25px;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+  padding: 2px;
+  cursor: not-allowed;
+  position: relative;
 }

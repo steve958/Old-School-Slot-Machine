@@ -2,26 +2,46 @@ export function possibleResults() {
   const allIcons = [
     { value: 300, iconID: 10 },
     { value: 120, iconID: 9 },
+    { value: 120, iconID: 9 },
+    { value: 60, iconID: 8 },
+    { value: 60, iconID: 8 },
     { value: 60, iconID: 8 },
     { value: 60, iconID: 7 },
+    { value: 60, iconID: 7 },
+    { value: 60, iconID: 7 },
+    { value: 60, iconID: 6 },
+    { value: 60, iconID: 6 },
+    { value: 60, iconID: 6 },
     { value: 60, iconID: 6 },
     { value: 40, iconID: 5 },
+    { value: 40, iconID: 5 },
+    { value: 40, iconID: 5 },
+    { value: 40, iconID: 5 },
+    { value: 40, iconID: 4 },
+    { value: 40, iconID: 4 },
+    { value: 40, iconID: 4 },
     { value: 40, iconID: 4 },
     { value: 20, iconID: 3 },
     { value: 20, iconID: 3 },
     { value: 20, iconID: 3 },
+    { value: 20, iconID: 3 },
+    { value: 20, iconID: 3 },
     { value: 20, iconID: 2 },
     { value: 20, iconID: 2 },
     { value: 20, iconID: 2 },
+    { value: 20, iconID: 2 },
+    { value: 20, iconID: 2 },
+    { value: 20, iconID: 1 },
+    { value: 20, iconID: 1 },
     { value: 20, iconID: 1 },
     { value: 20, iconID: 1 },
     { value: 20, iconID: 1 },
   ]
 
   return [
-    allIcons[Math.trunc(Math.random() * 16)],
-    allIcons[Math.trunc(Math.random() * 16)],
-    allIcons[Math.trunc(Math.random() * 16)],
+    allIcons[Math.trunc(Math.random() * 36)],
+    allIcons[Math.trunc(Math.random() * 36)],
+    allIcons[Math.trunc(Math.random() * 36)],
   ]
 }
 
@@ -74,6 +94,24 @@ export function calcScore(first, second, third) {
       first[2].iconID === third[0].iconID
     ) {
       score += first[2].value
+    }
+
+    if (
+      first[0] === second[0] &&
+      first[0] === third[0] &&
+      first[0] === first[1] &&
+      first[1] === second[1] &&
+      first[1] === third[1] &&
+      first[1] === first[2] &&
+      first[2] === second[2] &&
+      first[2] === third[2]
+    ) {
+      if (first[0].value === 20) {
+        score = 300
+      }
+      if (first[0].value === 40) {
+        score = 400
+      }
     }
   }
   return score
@@ -183,22 +221,22 @@ export function lowerHigherRandomizer(previousInt) {
   return random
 }
 
-export function calcSuperMeter(supermeter) {
+export function calcSuperMeter(supermeter, stake) {
   if (supermeter >= 750) {
-    return 200
+    return 200 * stake
   } else if (supermeter > 500) {
-    return 100
+    return 100 * stake
   } else if (supermeter > 400) {
-    return 40
+    return 40 * stake
   } else if (supermeter > 300) {
-    return 10
+    return 10 * stake
   } else if (supermeter > 250) {
-    return 6
+    return 6 * stake
   } else if (supermeter > 200) {
-    return 4
+    return 4 * stake
   } else if (supermeter > 150) {
-    return 3
-  } else if (supermeter > 100) {
-    return 2
+    return 3 * stake
+  } else {
+    return 2 * stake
   }
 }

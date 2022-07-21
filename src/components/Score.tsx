@@ -5,6 +5,9 @@ interface SuperMeterProps {
   superMeter: any
   setCredit: Function
   credit: number
+  stake: number
+  setStake: Function
+  startButtonClicked: boolean
 }
 
 const Score: React.FC<SuperMeterProps> = (props) => {
@@ -29,7 +32,35 @@ const Score: React.FC<SuperMeterProps> = (props) => {
       </span>
       <span id="stake-wrapper">
         <p>STAKE</p>
-        <div id="stake">1</div>
+        <div
+          id={!props.startButtonClicked ? 'stake' : 'stake-disabled'}
+          onClick={() => {
+            if (!props.startButtonClicked) {
+              props.setStake((oldState: number) => {
+                return props.credit >= oldState + 1 ? oldState + 1 : oldState
+              })
+            }
+          }}
+        >
+          {props.stake}
+          {props.stake > 1 ? (
+            <hr
+              id={
+                !props.startButtonClicked
+                  ? 'stake-minus'
+                  : 'stake-minus-disabled'
+              }
+              onClick={(e) => {
+                if (!props.startButtonClicked) {
+                  e.stopPropagation()
+                  props.setStake((oldState: number) => {
+                    return oldState > 1 ? oldState - 1 : oldState
+                  })
+                }
+              }}
+            />
+          ) : null}
+        </div>
       </span>
     </div>
   )

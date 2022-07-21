@@ -27,7 +27,6 @@ const LeftGameBox: React.FC<LeftBoxProps> = (props) => {
   useEffect(() => {
     if (firstMove === null) {
       setFirstMove(props.leftBoxMoves)
-      console.log(firstMove)
     } else if (secondMove === null) {
       setSecondMove(props.leftBoxMoves)
     } else if (thirdMove === null) {

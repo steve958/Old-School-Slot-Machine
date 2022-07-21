@@ -54,7 +54,7 @@ body {
 
 #start-button {
   position: absolute;
-  z-index: 10;
+  z-index: 2;
   background-color: darkred;
   color: white;
   cursor: pointer;
@@ -70,4 +70,25 @@ body {
   background-color: goldenrod;
   font-size: 29px;
   border-radius: 22px;
+}
+
+#change-buy-button {
+  position: absolute;
+  right: 160px;
+  top: 43vh;
+  padding: 10px;
+  border-radius: 10% / 50%;
+  background: #373b44;
+  background: -webkit-linear-gradient(to right, #4286f4, #373b44);
+  background: linear-gradient(to right, #4286f4, #373b44);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  -webkit-box-shadow: 5px 5px 10px 5px #000000;
+  box-shadow: 5px 5px 15px 5px #000000;
+}
+
+#change-buy-button:active {
+  padding: 9px;
+  box-shadow: 2px 2px 5px 2px #000000;
 }

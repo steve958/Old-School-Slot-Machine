@@ -16,7 +16,7 @@ interface NextMoveIndicatorProps {
 
 const NextMoveIndicator: React.FC<NextMoveIndicatorProps> = (props) => {
   useEffect(() => {
-    if (props.startButtonClicked && props.credit !== 0) {
+    if (props.startButtonClicked) {
       if (
         props.leftBoxScore === null ||
         props.middleBoxScore === null ||

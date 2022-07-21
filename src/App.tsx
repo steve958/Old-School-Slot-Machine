@@ -13,6 +13,7 @@ import { calcSuperMeter } from './logic/GameLogic'
 function App() {
   const [keyStroke, setKeyStroke] = useState<any>(false)
   const [credit, setCredit] = useState<number>(0)
+  const [stake, setStake] = useState<number>(1)
   const [currentMove, setCurrentMove] = useState<any>([])
   const [leftBoxMoves, setLeftBoxMoves] = useState<any>(null)
   const [middleBoxMoves, setMiddleBoxMoves] = useState<any>(null)
@@ -24,7 +25,27 @@ function App() {
   const [nextGame, setNextGame] = useState<boolean>(false)
   const [startButtonClicked, setStartButtonClicked] = useState<boolean>(false)
   const [betScreenActive, setBetScreenActive] = useState<boolean>(false)
+  const [changeClicked, setChangeClicked] = useState<boolean>(false)
+  const [buyClicked, setBuyClicked] = useState<boolean>(false)
+  const [fallBackMeter, setFallBackMeter] = useState<number>(0)
+  const [fallBackCredit, setFallBackCredit] = useState<number>(credit - 1)
+
   useEffect(() => {
+    if (credit < 0) {
+      setCredit(0)
+      setStartButtonClicked(false)
+    }
+  }, [credit])
+
+  useEffect(() => {
+    if (
+      typeof leftBoxScore === 'number' &&
+      typeof rightBoxScore === 'number' &&
+      typeof middleBoxScore === 'number' &&
+      typeof superMeter !== undefined
+    ) {
+      setFallBackMeter(calcSuperMeter(superMeter, stake))
+    }
     if (leftBoxScore || middleBoxScore || rightBoxScore) {
       if (leftBoxScore && middleBoxScore && rightBoxScore) {
         setSuperMeter((leftBoxScore + middleBoxScore + rightBoxScore) * 2)
@@ -38,14 +59,14 @@ function App() {
         setSuperMeter(leftBoxScore + rightBoxScore + middleBoxScore)
       }
     }
-  }, [leftBoxScore, rightBoxScore, middleBoxScore])
+  }, [leftBoxScore, middleBoxScore, rightBoxScore])
 
   useEffect(() => {
     if (
       typeof leftBoxScore === 'number' &&
       typeof rightBoxScore === 'number' &&
       typeof middleBoxScore === 'number' &&
-      superMeter > 100
+      superMeter >= 100
     ) {
       setTimeout(() => {
         setBetScreenActive(true)
@@ -58,9 +79,7 @@ function App() {
     ) {
       setTimeout(() => {
         setNextGame(!nextGame)
-        setCredit((oldState) => {
-          return oldState - 1
-        })
+        setFallBackCredit(credit - 1)
       }, 2000)
     }
   }, [superMeter, leftBoxScore, middleBoxScore, rightBoxScore])
@@ -73,13 +92,35 @@ function App() {
     setLeftBoxScore(null)
     setMiddleBoxScore(null)
     setSuperMeter(0)
-    setKeyStroke(false)
-    console.log('restart')
-
-    if (credit === 0) {
-      setStartButtonClicked(false)
-    }
+    setKeyStroke(!keyStroke)
+    setChangeClicked(false)
+    setBuyClicked(false)
+    setStartButtonClicked(false)
   }, [nextGame])
+
+  useEffect(() => {
+    if (startButtonClicked) {
+      if (credit !== fallBackCredit) {
+        setCredit((oldState) => {
+          return oldState - stake
+        })
+      }
+      setKeyStroke(!keyStroke)
+    }
+  }, [startButtonClicked])
+
+  function handleChangeClicked() {
+    setKeyStroke(!keyStroke)
+    setChangeClicked(true)
+  }
+
+  function handleBuyClicked() {
+    setKeyStroke(!keyStroke)
+    setBuyClicked(true)
+    setCredit((oldState) => {
+      return oldState - stake
+    })
+  }
 
   function handleKeyStrokeLeft() {
     if (leftBoxScore === null) {
@@ -108,7 +149,7 @@ function App() {
             typeof rightBoxScore === 'number' &&
             typeof middleBoxScore === 'number' &&
             superMeter > 100
-              ? calcSuperMeter(superMeter)
+              ? calcSuperMeter(superMeter, stake)
               : null
           }
           setBetScreenActive={setBetScreenActive}
@@ -116,6 +157,8 @@ function App() {
           setNextGame={setNextGame}
           nextGame={nextGame}
           setCredit={setCredit}
+          fallBackMeter={fallBackMeter}
+          stake={stake}
         ></BetScreen>
       )}
       <div id="upper-wrapper">
@@ -138,13 +181,16 @@ function App() {
         </div>
         <div id="upper-wrapper-right-section">
           <h2 id="heading">Points - Prizes</h2>
-          <PointsPrizes />
+          <PointsPrizes stake={stake} />
         </div>
         <div id="score-section">
           <Score
             superMeter={superMeter}
             setCredit={setCredit}
             credit={credit}
+            stake={stake}
+            setStake={setStake}
+            startButtonClicked={startButtonClicked}
           />
         </div>
       </div>
@@ -153,13 +199,29 @@ function App() {
           <button
             id="start-button"
             onClick={() => {
-              setStartButtonClicked(true)
-              setKeyStroke(false)
+              if (credit >= stake) {
+                setStartButtonClicked(true)
+                setKeyStroke(false)
+              } else {
+                setStake(credit)
+                setStartButtonClicked(true)
+                setKeyStroke(false)
+              }
             }}
           >
             START
           </button>
         ))}
+      {!changeClicked && startButtonClicked && (
+        <button id="change-buy-button" onClick={handleChangeClicked}>
+          change
+        </button>
+      )}
+      {changeClicked && !buyClicked && credit > 0 && (
+        <button id="change-buy-button" onClick={handleBuyClicked}>
+          buy
+        </button>
+      )}
       <div id="bottom-wrapper">
         <span
           onClick={() => {
