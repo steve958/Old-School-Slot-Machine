@@ -163,6 +163,9 @@ function App() {
       )}
       <div id="upper-wrapper">
         <div id="upper-wrapper-left-section">
+          {credit === 0 ? (
+            <p id="helper-text">Click credit field to add credit</p>
+          ) : null}
           <h2 id="heading">Points per Line</h2>
           <PointsPerLine />
         </div>
