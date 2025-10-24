@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import PointsPerLine from './components/PointsPerLine'
 import NextMoveIndicator from './components/NextMoveIndicator'
 import PointsPrizes from './components/PointsPrizes'
@@ -8,6 +8,7 @@ import LeftGameBox from './components/LeftGameBox'
 import MiddleGameBox from './components/MiddleGameBox'
 import RightGameBox from './components/RightGameBox'
 import BetScreen from './components/BetScreen'
+import KeyboardHelp from './components/KeyboardHelp'
 import { calcSuperMeter } from './logic/GameLogic'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
   const [buyClicked, setBuyClicked] = useState<boolean>(false)
   const [fallBackMeter, setFallBackMeter] = useState<number>(0)
   const [fallBackCredit, setFallBackCredit] = useState<number>(credit - 1)
+  const [showHelp, setShowHelp] = useState<boolean>(false)
 
   useEffect(() => {
     if (credit < 0) {
@@ -109,39 +111,175 @@ function App() {
     }
   }, [startButtonClicked])
 
-  function handleChangeClicked() {
-    setKeyStroke(!keyStroke)
+  const handleChangeClicked = useCallback(() => {
+    setKeyStroke((prev: any) => !prev)
     setChangeClicked(true)
-  }
+  }, [])
 
-  function handleBuyClicked() {
-    setKeyStroke(!keyStroke)
+  const handleBuyClicked = useCallback(() => {
+    setKeyStroke((prev: any) => !prev)
     setBuyClicked(true)
     setCredit((oldState) => {
       return oldState - stake
     })
-  }
+  }, [stake])
 
-  function handleKeyStrokeLeft() {
+  const handleKeyStrokeLeft = useCallback(() => {
     if (leftBoxScore === null) {
-      setKeyStroke(!keyStroke)
+      setKeyStroke((prev: any) => !prev)
     }
-  }
+  }, [leftBoxScore])
 
-  function handleKeyStrokeMiddle() {
+  const handleKeyStrokeMiddle = useCallback(() => {
     if (middleBoxScore === null) {
-      setKeyStroke(!keyStroke)
+      setKeyStroke((prev: any) => !prev)
     }
-  }
+  }, [middleBoxScore])
 
-  function handleKeyStrokeRight() {
+  const handleKeyStrokeRight = useCallback(() => {
     if (rightBoxScore === null) {
-      setKeyStroke(!keyStroke)
+      setKeyStroke((prev: any) => !prev)
     }
-  }
+  }, [rightBoxScore])
+
+  const handleStartButton = useCallback(() => {
+    if (credit >= stake) {
+      setStartButtonClicked(true)
+      setKeyStroke(false)
+    } else {
+      setStake(credit)
+      setStartButtonClicked(true)
+      setKeyStroke(false)
+    }
+  }, [credit, stake])
+
+  const handleStakeIncrease = useCallback(() => {
+    if (!startButtonClicked && credit > stake) {
+      setStake((prevStake) => prevStake + 1)
+    }
+  }, [startButtonClicked, credit, stake])
+
+  const handleStakeDecrease = useCallback(() => {
+    if (!startButtonClicked && stake > 1) {
+      setStake((prevStake) => prevStake - 1)
+    }
+  }, [startButtonClicked, stake])
+
+  // Keyboard event handler
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Handle help modal shortcuts (works everywhere)
+      if (event.key === '?' || event.key === '/') {
+        event.preventDefault()
+        setShowHelp(true)
+        return
+      }
+
+      if (event.key === 'Escape') {
+        if (showHelp) {
+          event.preventDefault()
+          setShowHelp(false)
+          return
+        }
+      }
+
+      // Prevent keyboard actions when bet screen or help modal is active
+      if (betScreenActive || showHelp) return
+
+      switch (event.key) {
+        case 'ArrowLeft':
+          // Left arrow - stop left game box
+          if (startButtonClicked && leftBoxScore === null) {
+            setLeftBoxMoves(currentMove)
+            handleKeyStrokeLeft()
+          }
+          break
+
+        case 'ArrowDown':
+          // Down arrow - stop middle game box
+          if (startButtonClicked && middleBoxScore === null) {
+            setMiddleBoxMoves(currentMove)
+            handleKeyStrokeMiddle()
+          }
+          break
+
+        case 'ArrowRight':
+          // Right arrow - stop right game box
+          if (startButtonClicked && rightBoxScore === null) {
+            setRightBoxMoves(currentMove)
+            handleKeyStrokeRight()
+          }
+          break
+
+        case ' ':
+          // Space - Change button
+          event.preventDefault() // Prevent page scroll
+          if (!changeClicked && startButtonClicked) {
+            handleChangeClicked()
+          }
+          break
+
+        case '+':
+        case '=':
+          // Plus key - Buy button
+          if (changeClicked && !buyClicked && credit > 0) {
+            handleBuyClicked()
+          }
+          break
+
+        case 'PageUp':
+          // PageUp - Increase stake
+          event.preventDefault()
+          handleStakeIncrease()
+          break
+
+        case 'PageDown':
+          // PageDown - Decrease stake
+          event.preventDefault()
+          handleStakeDecrease()
+          break
+
+        case 'Enter':
+          // Enter - Start button
+          if (credit > 0 && !startButtonClicked) {
+            handleStartButton()
+          }
+          break
+
+        default:
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [
+    betScreenActive,
+    showHelp,
+    startButtonClicked,
+    leftBoxScore,
+    middleBoxScore,
+    rightBoxScore,
+    changeClicked,
+    buyClicked,
+    credit,
+    currentMove,
+    handleKeyStrokeLeft,
+    handleKeyStrokeMiddle,
+    handleKeyStrokeRight,
+    handleChangeClicked,
+    handleBuyClicked,
+    handleStakeIncrease,
+    handleStakeDecrease,
+    handleStartButton,
+  ])
 
   return (
     <div className="App">
+      <KeyboardHelp isOpen={showHelp} onClose={() => setShowHelp(false)} />
       {betScreenActive && (
         <BetScreen
           superMeter={
@@ -161,6 +299,13 @@ function App() {
           stake={stake}
         ></BetScreen>
       )}
+      <button
+        id="help-button"
+        onClick={() => setShowHelp(true)}
+        title="Keyboard Shortcuts (Press ? or /)"
+      >
+        ?
+      </button>
       <div id="upper-wrapper">
         <div id="upper-wrapper-left-section">
           {credit === 0 ? (
@@ -199,19 +344,7 @@ function App() {
       </div>
       {credit === 0 ||
         (!startButtonClicked && (
-          <button
-            id="start-button"
-            onClick={() => {
-              if (credit >= stake) {
-                setStartButtonClicked(true)
-                setKeyStroke(false)
-              } else {
-                setStake(credit)
-                setStartButtonClicked(true)
-                setKeyStroke(false)
-              }
-            }}
-          >
+          <button id="start-button" onClick={handleStartButton}>
             START
           </button>
         ))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import './BetScreen.css'
 import { lowerHigherRandomizer } from '../logic/GameLogic'
 
@@ -79,6 +79,66 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
       setCurrentScore(200 * props.stake)
     }
   }, [currentScore])
+
+  const handleHigherBet = useCallback(() => {
+    if (currentScore > 0 && currentScore < 200 * props.stake) {
+      setUserClickedLower(false)
+      setUserClickedHigher(true)
+      setClickEvent((prev) => !prev)
+    }
+  }, [currentScore, props.stake])
+
+  const handleLowerBet = useCallback(() => {
+    if (currentScore > 0 && currentScore < 200 * props.stake) {
+      setUserClickedLower(true)
+      setUserClickedHigher(false)
+      setClickEvent((prev) => !prev)
+    }
+  }, [currentScore, props.stake])
+
+  const handleWithdraw = useCallback(() => {
+    if (currentScore > 0) {
+      props.setCredit((oldState: number) => {
+        return oldState + currentScore
+      })
+      setCurrentScore(0)
+      props.setSuperMeter(0)
+    }
+  }, [currentScore, props])
+
+  // Keyboard event handler for BetScreen
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowUp':
+          // Up arrow - bet Higher
+          event.preventDefault()
+          handleHigherBet()
+          break
+
+        case 'ArrowDown':
+          // Down arrow - bet Lower
+          event.preventDefault()
+          handleLowerBet()
+          break
+
+        case 'Enter':
+          // Enter - Withdraw
+          event.preventDefault()
+          handleWithdraw()
+          break
+
+        default:
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [handleHigherBet, handleLowerBet, handleWithdraw])
 
   return (
     <div id="bet-screen-container">
@@ -195,11 +255,7 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
           {currentScore < 200 * props.stake && (
             <div
               id="middle-lower"
-              onClick={() => {
-                setUserClickedLower(true)
-                setUserClickedHigher(false)
-                setClickEvent(!clickEvent)
-              }}
+              onClick={handleLowerBet}
               className={currentScore > 0 ? 'blinker-low' : undefined}
             >
               LOWER
@@ -209,11 +265,7 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
           {currentScore < 200 * props.stake && (
             <div
               id="middle-higher"
-              onClick={() => {
-                setUserClickedLower(false)
-                setUserClickedHigher(true)
-                setClickEvent(!clickEvent)
-              }}
+              onClick={handleHigherBet}
               className={currentScore > 0 ? 'blinker-high' : undefined}
             >
               HIGHER
@@ -221,16 +273,7 @@ const BetScreen: React.FC<BetScreenProps> = (props) => {
           )}
         </div>
         {currentScore > 0 ? (
-          <button
-            id="withdraw-button"
-            onClick={() => {
-              props.setCredit((oldState: number) => {
-                return oldState + currentScore
-              })
-              setCurrentScore(0)
-              props.setSuperMeter(0)
-            }}
-          >
+          <button id="withdraw-button" onClick={handleWithdraw}>
             withdraw
           </button>
         ) : null}
